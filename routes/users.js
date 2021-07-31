@@ -4,7 +4,7 @@ const users   = require('../model/user')
 const companies = require('../model/company')
 const crud    = require('../model/crud')
 
-router.post('/', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const value = await crud.read(users)
     return res.status(200).send(value)

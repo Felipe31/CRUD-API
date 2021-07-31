@@ -4,7 +4,7 @@ const assets  = require('../model/asset')
 const units   = require('../model/unit')
 const crud    = require('../model/crud')
 
-router.post('/', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const value = await crud.read(assets)
     return res.status(200).send(value)
