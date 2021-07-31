@@ -1,16 +1,12 @@
 const mongoose  = require('mongoose')
 const Schema    = mongoose.Schema
 
-const UserSchema = new  Schema({
-  username: {
+const UnitSchema = new  Schema({
+  name: {
     type: String,
     required: true,
     unique: true,
     lowercase: true
-  },
-  name: {
-    type: String,
-    required: true
   },
   created: {
     type: Date,
@@ -21,7 +17,6 @@ const UserSchema = new  Schema({
     required: true,
     ref: 'Company'
   }
-
 })
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('Unit', UnitSchema)

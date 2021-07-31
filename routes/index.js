@@ -11,7 +11,7 @@ router.use('/units',     unitsRoute)
 router.use('/users',     usersRoute)
 
 router.use((req, res) => {
-  return res.status(404).send({error: 'Not found!'});
+  return res.status(404).send({ error: 'Not found!' })
 });
 
 module.exports = router;
