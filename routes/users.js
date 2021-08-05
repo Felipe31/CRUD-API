@@ -1,13 +1,27 @@
-const express = require('express')
-const router  = express.Router()
-const users   = require('../model/user')
+const express   = require('express')
+const router    = express.Router()
+const users     = require('../model/user')
 const companies = require('../model/company')
-const crud    = require('../model/crud')
+const crud      = require('../model/crud')
 
 router.get('/', async (req, res) => {
   try {
-    const value = await crud.read(users)
-    return res.status(200).send(value)
+    var allUsers = await crud.read(users)
+    const companyIds = allUsers.map(company => company.fkCompany.toString())
+    const uniqueIds = companyIds.filter((v, i, a) => a.indexOf(v) === i)
+    companyObjects = []
+    for (companyId of uniqueIds) {
+      const company = await crud.readOne(companies, {'_id': companyId})
+      companyObjects.push(...company)
+    }
+
+    allUsers = allUsers.map(user => {
+      const company = companyObjects.filter(comp => {
+        return comp._id.toString() === user.fkCompany.toString()
+      })
+      return {...user._doc, 'companyName': company[0].name}
+    })
+    return res.status(200).send(allUsers)
   }
   catch (err) {
     return res.status(500).send({error: `Error on users select! ${err}`})

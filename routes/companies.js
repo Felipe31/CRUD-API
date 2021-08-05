@@ -5,9 +5,13 @@ const crud      = require('../model/crud')
 
 router.get('/', async (req, res) => {
   try {
-    const value = await crud.read(companies)
-    console.log(value)
-    return res.status(200).send(value)
+    var value
+    if (req.query.id)
+      value = await crud.readOne(companies, {'_id': req.query.id})
+    else
+      value = await crud.read(companies)
+
+      return res.status(200).send(value)
   }
   catch (err) {
     return res.status(500).send({error: `Error on companies select! ${err}`})
