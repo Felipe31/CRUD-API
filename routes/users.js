@@ -19,7 +19,10 @@ router.get('/', async (req, res) => {
       const company = companyObjects.filter(comp => {
         return comp._id.toString() === user.fkCompany.toString()
       })
-      return {...user._doc, 'companyName': company[0].name}
+      return {
+        ...user._doc,
+        'companyName': company.length > 0 ? company[0].name : ''
+      }
     })
     return res.status(200).send(allUsers)
   }

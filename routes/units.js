@@ -6,9 +6,25 @@ const crud      = require('../model/crud')
 
 router.get('/', async (req, res) => {
   try {
-    const value = await crud.read(units)
-    console.log(value)
-    return res.status(200).send(value)
+    var allUnits = await crud.read(units)
+    const companyIds = allUnits.map(company => company.fkCompany.toString())
+    const uniqueIds = companyIds.filter((v, i, a) => a.indexOf(v) === i)
+    companyObjects = []
+    for (companyId of uniqueIds) {
+      const company = await crud.readOne(companies, {'_id': companyId})
+      companyObjects.push(...company)
+    }
+
+    allUnits = allUnits.map(unit => {
+      const company = companyObjects.filter(comp => {
+        return comp._id.toString() === unit.fkCompany.toString()
+      })
+      return {
+        ...unit._doc,
+        'companyName': company.length > 0 ? company[0].name : ''
+      }
+    })
+    return res.status(200).send(allUnits)
   }
   catch (err) {
     return res.status(500).send({error: `Error on units select! ${err}`})

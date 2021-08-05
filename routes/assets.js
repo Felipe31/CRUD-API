@@ -6,8 +6,27 @@ const crud    = require('../model/crud')
 
 router.get('/', async (req, res) => {
   try {
-    const value = await crud.read(assets)
-    return res.status(200).send(value)
+    // const value = await crud.read(assets)
+    // return res.status(200).send(value)
+
+    var allAssets = await crud.read(assets)
+    const unitIds = allAssets.map(unit => unit.fkUnit.toString())
+    const uniqueIds = unitIds.filter((v, i, a) => a.indexOf(v) === i)
+    unitObjects = []
+    for (unitId of uniqueIds) {
+      const unit = await crud.readOne(units, {'_id': unitId})
+      unitObjects.push(...unit)
+    }
+    console.log(unitObjects)
+
+    allAssets = allAssets.map(asset => {
+      const unit = unitObjects.filter(item => {
+        return item._id.toString() === asset.fkUnit.toString()
+      })
+      console.log(unit)
+      return {...asset._doc, 'unitName': unit.length > 0 ? unit[0].name : ''}
+    })
+    return res.status(200).send(allAssets)
   }
   catch (err) {
     return res.status(500).send({error: `Error on assets select! ${err}`})
