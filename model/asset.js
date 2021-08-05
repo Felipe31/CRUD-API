@@ -8,8 +8,9 @@ const AssetSchema = new  Schema({
     unique: true
   },
   image: {
-    data: Buffer,
-    contentType: String
+    // data: Buffer,
+    // contentType: String
+    type: String
   },
   description: {
     type: String
