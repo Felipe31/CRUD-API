@@ -1,3 +1,4 @@
+'use strict'
 require('dotenv').config();
 require('./model/connection')
 const express = require('express')

@@ -1,3 +1,4 @@
+'use strict'
 const express = require('express')
 const router    = express.Router()
 const companies = require('../model/company')
@@ -34,7 +35,7 @@ router.post('/create', async (req, res) => {
   }
 })
 
-router.post('/update', async (req, res) => {
+router.patch('/update', async (req, res) => {
   const {oldName, name} = req.body;
 
   if (!oldName || !name) return res.status(400).send({error: 'Incorrect or missing parameters!'})
@@ -47,7 +48,7 @@ router.post('/update', async (req, res) => {
   }
 })
 
-router.post('/delete', async (req, res) => {
+router.delete('/delete', async (req, res) => {
   const {name} = req.body;
 
   if (!name) return res.status(400).send({error: 'Incorrect or missing parameters!'})

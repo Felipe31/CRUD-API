@@ -1,13 +1,13 @@
+'use strict'
 
 const read = async (model) =>{
-  return model.find({}, (err, data) => {
-    if(err) throw err
+  return await model.find({}).then( (data) => {
     return data
-  })
+  }).catch(err => {throw err})
 }
 
 const readOne = async (model, keyPair) =>{
-  return model.find(keyPair, (err, data) => {
+  return await model.find(keyPair, (err, data) => {
     if(err) throw err
     return data
   })
