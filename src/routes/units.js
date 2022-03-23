@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     var allUnits = await crud.read(units)
     const companyIds = allUnits.map(company => company.fkCompany.toString())
     const uniqueIds = companyIds.filter((v, i, a) => a.indexOf(v) === i)
-    companyObjects = []
+    var companyObjects = []
     for (companyId of uniqueIds) {
       const company = await crud.readOne(companies, {'_id': companyId})
       companyObjects.push(...company)
@@ -45,7 +45,8 @@ router.post('/create', async (req, res) => {
   body.fkCompany = company[0]._id
 
   try {
-    return res.status(201).send(await crud.create(units, {name}, body))
+    var resBody = await crud.create(units, {name}, body)
+    return res.status(201).send({name: resBody.name, fkCompany})
   }
   catch (err) {
     if (err.message === 'Already exists')
@@ -55,7 +56,7 @@ router.post('/create', async (req, res) => {
   }
 })
 
-router.post('/update', async (req, res) => {
+router.patch('/update', async (req, res) => {
   var {oldName, name, fkCompany} = req.body;
 
   if (!name)
@@ -72,21 +73,24 @@ router.post('/update', async (req, res) => {
   }
 
   try {
-    return res.status(200).send(await crud.update(units, oldName, body))
+    var resBody = await crud.update(units, oldName, body)
+    return res.status(200).send({name: resBody.name, fkCompany})
   }
   catch (err) {
     return res.status(500).send({error: `Error on unit update! ${err}`})
   }
 })
 
-router.post('/delete', async (req, res) => {
+router.delete('/delete', async (req, res) => {
   const {name} = req.body;
 
   if (!name)
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
   try {
-    return res.status(201).send(await crud.remove(units, {name}))
+    var resBody = await crud.remove(units, {name})
+    const company = await crud.readOne(companies, {_id: resBody.fkCompany})
+    return res.status(201).send({name: resBody.name, fkCompany: company.name})
   }
   catch (err) {
     return res.status(500).send({error: `Error on unit delete! ${err}`})

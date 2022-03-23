@@ -7,7 +7,6 @@ const UnitSchema = new  Schema({
     type: String,
     required: true,
     unique: true,
-    lowercase: true
   },
   created: {
     type: Date,

@@ -7,10 +7,9 @@ const read = async (model) =>{
 }
 
 const readOne = async (model, keyPair) =>{
-  return await model.find(keyPair, (err, data) => {
-    if(err) throw err
+  return await model.findOne(keyPair).then( (data) => {
     return data
-  })
+  }).catch(err => {throw err})
 }
 
 const create = async (model, keyPair, allFields) =>{
