@@ -8,12 +8,13 @@ const crud      = require('../model/crud')
 router.get('/', async (req, res) => {
   try {
     var allUnits = await crud.read(units)
-    const companyIds = allUnits.map(company => company.fkCompany.toString())
+    const companyIds = allUnits.map(company => company.fkCompany)
     const uniqueIds = companyIds.filter((v, i, a) => a.indexOf(v) === i)
     var companyObjects = []
-    for (companyId of uniqueIds) {
-      const company = await crud.readOne(companies, {'_id': companyId})
-      companyObjects.push(...company)
+
+    for (var companyId of uniqueIds) {
+      const company = await crud.readById(companies, companyId)
+      companyObjects.push(company)
     }
 
     allUnits = allUnits.map(unit => {
@@ -39,10 +40,10 @@ router.post('/create', async (req, res) => {
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
   const company = await crud.readOne(companies, {'name': fkCompany})
-  if (company.length == 0)
+  if (!company)
     return res.status(406).send({error: 'Given company does not exist!'})
   const body = req.body
-  body.fkCompany = company[0]._id
+  body.fkCompany = company._id
 
   try {
     var resBody = await crud.create(units, {name}, body)
@@ -67,9 +68,9 @@ router.patch('/update', async (req, res) => {
   const body = req.body
   if (fkCompany) {
     const company = await crud.readOne(companies, {'name': fkCompany})
-    if (company.length == 0)
+    if (!company)
       return res.status(406).send({error: 'Given company does not exist!'})
-    body.fkCompany = company[0]._id
+    body.fkCompany = company._id
   }
 
   try {
@@ -89,7 +90,7 @@ router.delete('/delete', async (req, res) => {
 
   try {
     var resBody = await crud.remove(units, {name})
-    const company = await crud.readOne(companies, {_id: resBody.fkCompany})
+    const company = await crud.readById(companies, resBody.fkCompany)
     return res.status(201).send({name: resBody.name, fkCompany: company.name})
   }
   catch (err) {

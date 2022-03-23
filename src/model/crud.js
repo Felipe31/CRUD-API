@@ -6,6 +6,18 @@ const read = async (model) =>{
   }).catch(err => {throw err})
 }
 
+const readBy = async (model, keyPair) =>{
+  return await model.find(keyPair).then( (data) => {
+    return data
+  }).catch(err => {throw err})
+}
+
+const readById = async (model, id) =>{
+  return await model.findById(id).then( (data) => {
+    return data
+  }).catch(err => {throw err})
+}
+
 const readOne = async (model, keyPair) =>{
   return await model.findOne(keyPair).then( (data) => {
     return data
@@ -43,4 +55,4 @@ const remove = async (model, keyPair) =>{
   }
 }
 
-module.exports = { create, read, readOne, update, remove};
+module.exports = { create, read, readOne, readBy, readById, update, remove};
