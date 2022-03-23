@@ -4,7 +4,7 @@
   "description": "Traction challenge backend",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest --runInBand --watch",
     "start": "nodemon src/index.js"
   },
   "author": "Felipe Soares",

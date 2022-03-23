@@ -11,7 +11,8 @@ var SECONDARY_NAME = "Company 2"
 
 beforeAll(async() => {
   await new Promise(r => setTimeout(r, 1000))
-  companies.deleteMany({})
+  await remove(MODULE, {name: PRIMARY_NAME}, true)
+  await remove(MODULE, {name: SECONDARY_NAME}, true)
 })
 
 test("Company: insert", async() => {
@@ -20,8 +21,8 @@ test("Company: insert", async() => {
 })
 
 test("Company: update", async() => {
-  var body = {oldName: PRIMARY_NAME, name: 'Company 2'}
-  var company = {name: "Company 2"}
+  var body = {oldName: PRIMARY_NAME, name: SECONDARY_NAME}
+  var company = {name: SECONDARY_NAME}
   await update(MODULE, body, company)
 })
 
