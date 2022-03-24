@@ -9,7 +9,7 @@
 - Health level needs to be between 0% to 100%.
 
 
-This application is currently available [here](https://freiossupremosapi.herokuapp.com/) for testing.
+This application is currently available [here](https://tractianapi.herokuapp.com/) for testing.
 
 ### Running
 
