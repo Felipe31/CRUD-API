@@ -1,7 +1,7 @@
 'use strict'
 const fetch = require('cross-fetch')
 
-async function  insert(module, body, discardResponse) {
+async function insert(module, body, discardResponse) {
   const path = module + "/create"
   const response = await fetch(`http://${process.env.HOST}:${process.env.PORT}/${path}`, {
     method: 'POST',
@@ -47,16 +47,23 @@ async function get(module, expectations) {
   const path = module
   const response = await fetch(`http://${process.env.HOST}:${process.env.PORT}/${path}`)
   const responseBody = await response.json()
+
   expect(responseBody.error).toBeUndefined()
   expect(responseBody.length).toBe(expectations.length)
-  
   expect(response.status).toBe(200)
-
+  
   for (var i = 0; i < responseBody.length; ++i) {
     for (var key in expectations) {
       expect(responseBody[i][key]).toBe(expectations[i][key])
     }
   }
+}
+
+async function getAndResponse(module) {
+  const path = module
+  const response = await fetch(`http://${process.env.HOST}:${process.env.PORT}/${path}`)
+  const responseBody = await response.json()
+  return responseBody
 }
 
 async function remove(module, body, discardResponse) {
@@ -80,4 +87,4 @@ async function remove(module, body, discardResponse) {
     expect(responseBody[key]).toBe(body[key])
   }
 }
-module.exports = {insert, update, get, remove}
+module.exports = {insert, update, get, getAndResponse, remove}
