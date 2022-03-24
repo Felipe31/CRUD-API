@@ -1,7 +1,7 @@
-# CRUD backend to handle companies, units, assets and users
+# CRUD backend to handle companies, units, assets, and users
 
 ### Rules
-- Each asset must have an image, name, description, model, owner, status and health level;
+- Each asset must have an image, name, description, model, owner, status, and health level;
 - Each asset is part of a unit;
 - Each unit is part of a company;
 - Every user is part of a company;
@@ -20,12 +20,12 @@ $ npm start
 
 ### Testing
 
-The `tests` folder hold all automated testing using jest.
+The `tests` folder holds all automated testing using jest.
 This API can be tested automatically using `npm test` or manually, by using the [Postman](https://github.com/Felipe31/CRUD-API/blob/main/postman/Tractian%20Backend.postman_collection.json) file (which contains one test case for each route). The Postman tests also need the environment [variables](https://github.com/Felipe31/CRUD-API/blob/main/postman/Localhost.postman_environment.json).
 
 ### Database
 
-The database used in this project is mongodb and the connection to it was made using `mongoose` and [mongodb atlas](https://www.mongodb.com/atlas/database). To connect this application to your mongodb database, you need to create a `.env` file, and set the variables shown in `.env.example`.
+The database used in this project is mongodb and the connection to it was made using `mongoose` and [mongodb atlas](https://www.mongodb.com/atlas/database). To connect this application to your mongodb database, you need to create a `.env` file, and set the variables shown in the `.env.example`.
 
 For example:
 ```
@@ -90,7 +90,7 @@ All fields starting with `fk` followed by another type name (e.g. `fkUnit`) shou
 }
 ```
 ### Endpoints
-There are endpoints availables for assets, companies, units and users as follows.
+There are endpoints available for assets, companies, units, and users as follows.
 
 ##### Assets endpoints:
 ```
@@ -137,5 +137,5 @@ E.g. `PUT /companies`
   "name": "Company 2"
 }
 ```
-This happens, because the `name` property is used as an unique identifier in a company, asset, or unit. The only one that differs is users. Its identifier is the `username`.
+This happens because the `name` property is used as a unique identifier in a company, asset, or unit. The only one that differs is users. Its identifier is the `username`.
 This feature does not include the internal `_id` used by mongoose.
