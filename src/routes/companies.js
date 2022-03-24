@@ -6,16 +6,21 @@ const crud      = require('../model/crud')
 
 router.get('/', async (req, res) => {
   try {
-    var value
-    if (req.query.id)
-      value = await crud.readOne(companies, {'_id': req.query.id})
-    else
-      value = await crud.read(companies)
-
+      const value = await crud.read(companies)
       return res.status(200).send(value)
   }
   catch (err) {
     return res.status(500).send({error: `Error on companies select! ${err}`})
+  }
+})
+
+router.get('/:name', async (req, res) => {
+  try {
+    const value = await crud.readOne(companies, {name: req.params.name})
+    return res.status(200).send(value)
+  }
+  catch (err) {
+    return res.status(500).send({error: `Error on company select by name! ${err}`})
   }
 })
 

@@ -30,6 +30,10 @@ test("Company: get", async() => {
   await get(MODULE, [{name: SECONDARY_NAME}])
 })
 
+test("Company: get name", async() => {
+  await get(MODULE + "/" + SECONDARY_NAME, {name: SECONDARY_NAME})
+})
+
 test("Company: delete", async() => {
   var body = {name: SECONDARY_NAME}
   await remove(MODULE, body)
