@@ -119,7 +119,7 @@ This happens, because the `name` property is used as an unique identifier in a c
 This feature does not include the internal `_id` used by mongoose.
 
 ## Testing
-This API can be tested automatically using `npm test` or manually, by using the [Postman](https://github.com/Felipe31/CRUD-API/blob/main/tests//Tractian%20Backend.postman_collection.json) file (which contains one test case for each route). 
+This API can be tested automatically using `npm test` or manually, by using the [Postman](https://github.com/Felipe31/CRUD-API/blob/main/postman/Tractian%20Backend.postman_collection.json) file (which contains one test case for each route). The Postman tests also need the environment [variables](https://github.com/Felipe31/CRUD-API/blob/main/postman/Localhost.postman_environment.json).
 
 ## Database
 
