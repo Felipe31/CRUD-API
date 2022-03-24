@@ -51,9 +51,9 @@ router.post('/', async (req, res) => {
   }
   catch (err) {
     if (err.message === 'Already exists')
-      return res.status(406).send({error: 'Unit already exists!'})
+      return res.status(406).send({error: 'Asset already exists!'})
     else
-      return res.status(500).send({error: `Error on unit creation! ${err}`})
+      return res.status(500).send({error: `Error on asset creation! ${err}`})
   }
 })
 
@@ -78,7 +78,7 @@ router.put('/', async (req, res) => {
     return res.status(200).send({...resBody._doc, fkUnit})
   }
   catch (err) {
-    return res.status(500).send({error: `Error on unit update! ${err}`})
+    return res.status(500).send({error: `Error on asset update! ${err}`})
   }
 })
 
@@ -95,7 +95,7 @@ router.delete('/', async (req, res) => {
     return res.status(201).send({...resBody._doc, fkUnit: unit.name})
   }
   catch (err) {
-    return res.status(500).send({error: `Error on unit delete! ${err}`})
+    return res.status(500).send({error: `Error on asset delete! ${err}`})
   }
 })
 
