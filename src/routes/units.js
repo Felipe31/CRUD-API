@@ -39,15 +39,16 @@ router.post('/create', async (req, res) => {
   if (!name || !fkCompany)
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
-  const company = await crud.readOne(companies, {'name': fkCompany})
+  const company = await crud.readOne(companies, {name: fkCompany})
   if (!company)
     return res.status(406).send({error: 'Given company does not exist!'})
   const body = req.body
   body.fkCompany = company._id
 
   try {
-    var resBody = await crud.create(units, {name}, body)
-    return res.status(201).send({name: resBody.name, fkCompany})
+    var resBody = (await crud.create(units, {name}, body))._doc
+    resBody.fkCompany = fkCompany
+    return res.status(201).send(resBody)
   }
   catch (err) {
     if (err.message === 'Already exists')
@@ -59,23 +60,24 @@ router.post('/create', async (req, res) => {
 
 router.patch('/update', async (req, res) => {
   var {oldName, name, fkCompany} = req.body;
+  var body = {name, fkCompany}
 
   if (!name)
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
   if (!oldName) oldName = name
 
-  const body = req.body
   if (fkCompany) {
-    const company = await crud.readOne(companies, {'name': fkCompany})
+    const company = await crud.readOne(companies, {name: fkCompany})
     if (!company)
       return res.status(406).send({error: 'Given company does not exist!'})
     body.fkCompany = company._id
   }
 
   try {
-    var resBody = await crud.update(units, oldName, body)
-    return res.status(200).send({name: resBody.name, fkCompany})
+    var resBody = (await crud.update(units, {oldName}, body))._doc
+    resBody.fkCompany = fkCompany
+    return res.status(200).send(resBody)
   }
   catch (err) {
     return res.status(500).send({error: `Error on unit update! ${err}`})
@@ -89,9 +91,10 @@ router.delete('/delete', async (req, res) => {
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
   try {
-    var resBody = await crud.remove(units, {name})
+    var resBody = (await crud.remove(units, {name}))._doc
     const company = await crud.readById(companies, resBody.fkCompany)
-    return res.status(201).send({name: resBody.name, fkCompany: company.name})
+    resBody.fkCompany = company.name
+    return res.status(201).send(resBody)
   }
   catch (err) {
     return res.status(500).send({error: `Error on unit delete! ${err}`})

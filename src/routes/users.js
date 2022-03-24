@@ -8,12 +8,13 @@ const crud      = require('../model/crud')
 router.get('/', async (req, res) => {
   try {
     var allUsers = await crud.read(users)
-    const companyIds = allUsers.map(company => company.fkCompany.toString())
+    const companyIds = allUsers.map(company => company.fkCompany)
     const uniqueIds = companyIds.filter((v, i, a) => a.indexOf(v) === i)
-    companyObjects = []
-    for (companyId of uniqueIds) {
-      const company = await crud.readOne(companies, {'_id': companyId})
-      companyObjects.push(...company)
+    var companyObjects = []
+
+    for (var companyId of uniqueIds) {
+      const company = await crud.readById(companies, companyId)
+      companyObjects.push(company)
     }
 
     allUsers = allUsers.map(user => {
@@ -38,14 +39,16 @@ router.post('/create', async (req, res) => {
   if (!username || !name || !fkCompany)
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
-  const company = await crud.readOne(companies, {'name': fkCompany})
-  if (company.length == 0)
+  const company = await crud.readOne(companies, {name: fkCompany})
+  if (!company)
     return res.status(406).send({error: 'Given company does not exist!'})
   const body = req.body
-  body.fkCompany = company[0]._id
+  body.fkCompany = company._id
 
   try {
-    return res.status(201).send(await crud.create(users, {username}, body))
+    var resBody = (await crud.create(users, {username}, body))._doc
+    resBody.fkCompany = fkCompany
+    return res.status(201).send(resBody)
   }
   catch (err) {
     if (err.message === 'Already exists')
@@ -55,36 +58,43 @@ router.post('/create', async (req, res) => {
   }
 })
 
-router.post('/update', async (req, res) => {
-  const {username, name, fkCompany} = req.body;
+router.patch('/update', async (req, res) => {
+  var {oldUsername, username, name, fkCompany} = req.body;
+  var body = {username, name, fkCompany}
 
   if (!username || !name)
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
-  const body = req.body
+  if (!oldUsername) oldUsername = username
+
   if (fkCompany) {
-    const company = await crud.readOne(companies, {'name': fkCompany})
-    if (company.length == 0)
+    const company = await crud.readOne(companies, {name: fkCompany})
+    if (!company)
       return res.status(406).send({error: 'Given company does not exist!'})
-    body.fkCompany = company[0]._id
+    body.fkCompany = company._id
   }
 
   try {
-    return res.status(200).send(await crud.update(users, {username}, body))
+    var resBody = (await crud.update(users, {oldUsername}, body))._doc
+    resBody.fkCompany = fkCompany
+    return res.status(200).send(resBody)
   }
   catch (err) {
     return res.status(500).send({error: `Error on user update! ${err}`})
   }
 })
 
-router.post('/delete', async (req, res) => {
+router.delete('/delete', async (req, res) => {
   const {username} = req.body;
 
   if (!username)
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
   try {
-    return res.status(201).send(await crud.remove(users, {username}))
+    var resBody = (await crud.remove(users, {username}))._doc
+    const company = await crud.readById(companies, resBody.fkCompany)
+    resBody.fkCompany = company.name
+    return res.status(201).send(resBody)
   }
   catch (err) {
     return res.status(500).send({error: `Error on user delete! ${err}`})
