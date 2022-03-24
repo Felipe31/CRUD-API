@@ -27,7 +27,7 @@ The `npm test` command tests all available endpoints.
 
 ### Organization
 
-The rules presented are organized as follows.
+The objects presented are organized as follows.
 
 Note that every registry has an ID and a timestamp of creation. Both are created automatically by mongodb
 ```json
@@ -68,7 +68,7 @@ All fields starting with `fk` followed by another type name (e.g. `fkUnit`) shou
   "fkCompany": "Company 1"
 ```
 ### Endpoints
-There are endpoints availables for assets, companies, units and users as follows:
+There are endpoints availables for assets, companies, units and users as follows.
 
 ##### Assets endpoints:
 ```
@@ -85,6 +85,7 @@ PUT /companies
 DELETE /companies
 GET /companies
 GET /companies/{fkCompany}
+GET /companies/{fkCompany}/assets
 ```
 * e.g. localhost/companies/MyCompany
 
@@ -104,8 +105,21 @@ DELETE /users
 GET /users
 ```
 
+#### Updating data
+Note that for `PUT` (update) operations, the body can contain a field for the current identifier (prefixed with "old"), in case it is going to be changed.
+
+E.g. `PUT /companies`
+```
+{
+  "oldName": "Company 1",
+  "name": "Company 2"
+}
+```
+This happens, because the `name` property is used as an unique identifier in a company, asset, or unit. The only one that differs is users. Its identifier is the `username`.
+This feature does not include the internal `_id` used by mongoose.
+
 ## Testing
-This API can be tested automatically using `npm test` or manually, ~by using the Postman file (which contains one test case for each route).~ 
+This API can be tested automatically using `npm test` or manually, by using the [Postman](https://github.com/Felipe31/CRUD-API/blob/main/tests//Tractian%20Backend.postman_collection.json) file (which contains one test case for each route). 
 
 ## Database
 
