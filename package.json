@@ -5,13 +5,13 @@
   "main": "src/index.js",
   "scripts": {
     "test": "jest --runInBand --watch",
-    "start": "nodemon src/index.js"
+    "start": "node src/index.js",
+    "start-nodemon": "nodemon src/index.js"
   },
   "author": "Felipe Soares",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.2",
-    "cors": "^2.8.5",
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
