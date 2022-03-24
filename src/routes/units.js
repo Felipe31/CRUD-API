@@ -90,6 +90,7 @@ router.delete('/', async (req, res) => {
 
   try {
     var resBody = await crud.remove(units, {name})
+    if (!resBody) return res.status(404).send({error: "Unit not found!"})
     const company = await crud.readById(companies, resBody.fkCompany)
     return res.status(201).send({...resBody._doc, fkCompany: company.name})
   }
