@@ -43,7 +43,7 @@ test("Unit: update company", async() => {
 })
 
 test("Unit: get", async() => {
-  await get(MODULE, [{name: SECONDARY_NAME}])
+  await get(MODULE, [{name: SECONDARY_NAME, fkCompany: COMPANY_NAME2}])
 })
 
 test("Unit: delete", async() => {

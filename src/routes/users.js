@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
       })
       return {
         ...user._doc,
-        'companyName': company.length > 0 ? company[0].name : ''
+        fkCompany: company.length > 0 ? company[0].name : ''
       }
     })
     return res.status(200).send(allUsers)
@@ -35,6 +35,7 @@ router.get('/', async (req, res) => {
 
 router.post('/create', async (req, res) => {
   const {username, name, fkCompany} = req.body;
+  var body = {username, name, fkCompany}
 
   if (!username || !name || !fkCompany)
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
@@ -42,13 +43,11 @@ router.post('/create', async (req, res) => {
   const company = await crud.readOne(companies, {name: fkCompany})
   if (!company)
     return res.status(406).send({error: 'Given company does not exist!'})
-  const body = req.body
   body.fkCompany = company._id
 
   try {
-    var resBody = (await crud.create(users, {username}, body))._doc
-    resBody.fkCompany = fkCompany
-    return res.status(201).send(resBody)
+    var resBody = await crud.create(users, {username}, body)
+    return res.status(201).send({...resBody._doc, fkCompany})
   }
   catch (err) {
     if (err.message === 'Already exists')
@@ -75,9 +74,8 @@ router.patch('/update', async (req, res) => {
   }
 
   try {
-    var resBody = (await crud.update(users, {oldUsername}, body))._doc
-    resBody.fkCompany = fkCompany
-    return res.status(200).send(resBody)
+    var resBody = await crud.update(users, {oldUsername}, body)
+    return res.status(200).send({...resBody._doc, fkCompany})
   }
   catch (err) {
     return res.status(500).send({error: `Error on user update! ${err}`})
@@ -91,10 +89,9 @@ router.delete('/delete', async (req, res) => {
     return res.status(400).send({error: 'Incorrect or missing parameters!'})
 
   try {
-    var resBody = (await crud.remove(users, {username}))._doc
+    var resBody = await crud.remove(users, {username})
     const company = await crud.readById(companies, resBody.fkCompany)
-    resBody.fkCompany = company.name
-    return res.status(201).send(resBody)
+    return res.status(201).send({...resBody._doc, fkCompany: company.name})
   }
   catch (err) {
     return res.status(500).send({error: `Error on user delete! ${err}`})
