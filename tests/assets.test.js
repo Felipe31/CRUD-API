@@ -1,8 +1,6 @@
 'use strict'
 require('dotenv').config();
 const {insert, update, get, getAndResponse, remove} = require("./crud.helper")
-const assets = require("../src/model/asset")
-const units  = require("../src/model/unit")
 
 const MODULE = "assets"
 const PRIMARY_NAME = "Asset 1"

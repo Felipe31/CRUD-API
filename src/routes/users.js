@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.post('/create', async (req, res) => {
+router.post('/', async (req, res) => {
   const {username, name, fkCompany} = req.body;
   var body = {username, name, fkCompany}
 
@@ -57,7 +57,7 @@ router.post('/create', async (req, res) => {
   }
 })
 
-router.patch('/update', async (req, res) => {
+router.put('/', async (req, res) => {
   var {oldUsername, username, name, fkCompany} = req.body;
   var body = {username, name, fkCompany}
 
@@ -82,7 +82,7 @@ router.patch('/update', async (req, res) => {
   }
 })
 
-router.delete('/delete', async (req, res) => {
+router.delete('/', async (req, res) => {
   const {username} = req.body;
 
   if (!username)

@@ -24,7 +24,7 @@ router.get('/:name', async (req, res) => {
   }
 })
 
-router.post('/create', async (req, res) => {
+router.post('/', async (req, res) => {
   const {name} = req.body;
 
   if (!name) return res.status(400).send({error: 'Incorrect or missing parameters!'})
@@ -40,7 +40,7 @@ router.post('/create', async (req, res) => {
   }
 })
 
-router.patch('/update', async (req, res) => {
+router.put('/', async (req, res) => {
   const {oldName, name} = req.body;
 
   if (!oldName || !name) return res.status(400).send({error: 'Incorrect or missing parameters!'})
@@ -53,7 +53,7 @@ router.patch('/update', async (req, res) => {
   }
 })
 
-router.delete('/delete', async (req, res) => {
+router.delete('/', async (req, res) => {
   const {name} = req.body;
 
   if (!name) return res.status(400).send({error: 'Incorrect or missing parameters!'})

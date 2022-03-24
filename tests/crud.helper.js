@@ -2,7 +2,7 @@
 const fetch = require('cross-fetch')
 
 async function insert(module, body, discardResponse) {
-  const path = module + "/create"
+  const path = module
   const response = await fetch(`http://${process.env.HOST}:${process.env.PORT}/${path}`, {
     method: 'POST',
     headers: {
@@ -24,9 +24,9 @@ async function insert(module, body, discardResponse) {
 }
 
 async function update(module, body, expectations) {
-  const path = module + "/update"
+  const path = module
   const response = await fetch(`http://${process.env.HOST}:${process.env.PORT}/${path}`, {
-    method: 'PATCH',
+    method: 'PUT',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -67,7 +67,7 @@ async function getAndResponse(module) {
 }
 
 async function remove(module, body, discardResponse) {
-  const path = module + "/delete"
+  const path = module
   const response = await fetch(`http://${process.env.HOST}:${process.env.PORT}/${path}`, {
     method: 'DELETE',
     headers: {

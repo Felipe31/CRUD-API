@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.post('/create', async (req, res) => {
+router.post('/', async (req, res) => {
   const {name, fkUnit, image, description, model, owner, status, health} = req.body;
 
   if (!name || !fkUnit)
@@ -57,7 +57,7 @@ router.post('/create', async (req, res) => {
   }
 })
 
-router.patch('/update', async (req, res) => {
+router.put('/', async (req, res) => {
   var {oldName, name, fkUnit, image, description, model, owner, status, health} = req.body;
   var body = {name, fkUnit, image, description, model, owner, status, health}
 
@@ -82,7 +82,7 @@ router.patch('/update', async (req, res) => {
   }
 })
 
-router.delete('/delete', async (req, res) => {
+router.delete('/', async (req, res) => {
   const {name} = req.body;
 
   if (!name)
